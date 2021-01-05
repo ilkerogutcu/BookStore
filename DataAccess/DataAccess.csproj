@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,6 +20,11 @@
       <PackageReference Include="MySql.Data.EntityFramework" Version="8.0.22" />
       <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.22" />
       <PackageReference Include="MySql.Data.EntityFrameworkCore.Design" Version="8.0.19" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations" />
+      <Folder Include="Migrations\AuthenticationDb" />
     </ItemGroup>
 
 </Project>
