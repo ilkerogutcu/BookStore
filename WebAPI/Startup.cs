@@ -1,6 +1,7 @@
 using System.Text;
 using Business.Abstract;
 using Business.Concrete;
+using Core.Exceptions;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.EntityFramework.Authentication;
@@ -78,6 +79,8 @@ namespace WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseMyMiddleware();
 
             app.UseAuthorization();
 

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Business.Abstract;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +22,8 @@ namespace WebAPI.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
         {
-            return _authService.Register(registerRequest).Result.Succeeded
+            var result = await _authService.Register(registerRequest);
+            return  result.Succeeded
                 ? Ok(new Response
                 {
                     Status = "Success",
@@ -36,9 +38,16 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<Task<string>> Login([FromBody] LoginRequest loginRequest)
+        public async Task<string> Login([FromBody] LoginRequest loginRequest)
         {
-            return _authService.Login(loginRequest);
+            var result=await _authService.Login(loginRequest);
+
+            if (result!=null)
+            {
+                return result;
+            }
+            throw new Exception("Failed login");
+
         }
     }
 }
