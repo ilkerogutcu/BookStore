@@ -1,7 +1,8 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.Concrete.Authentication;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Authorization;
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -16,6 +17,8 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("get/all")]
+        [Authorize(Roles = UserRoles.Admin)]
+        [Authorize]
         public IActionResult GetList()
         {
             return Ok(_bookService.GetAll());

@@ -81,7 +81,7 @@ namespace WebAPI
             app.UseRouting();
 
             app.UseMyMiddleware();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

@@ -21,12 +21,14 @@ namespace Business.Concrete
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-     
-        public AuthManager(IConfiguration configuration, UserManager<User> userManager)
+        public AuthManager(IConfiguration configuration, UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _configuration = configuration;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<IdentityResult> Register(RegisterRequest registerRequest)
@@ -40,7 +42,12 @@ namespace Business.Concrete
                 UserName = registerRequest.Username
             };
             var result = await _userManager.CreateAsync(user, registerRequest.Password);
+           
 
+            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            {
+                await _userManager.AddToRoleAsync(user, UserRoles.Admin);
+            }
             return result;
         }
 
@@ -49,7 +56,7 @@ namespace Business.Concrete
             var user = await _userManager.FindByNameAsync(loginRequest.Username);
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
                 throw new Exception("Unauthorized");
-            
+
             var userRoles = await _userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>
             {
@@ -69,7 +76,6 @@ namespace Business.Concrete
 
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-
         }
     }
 }
